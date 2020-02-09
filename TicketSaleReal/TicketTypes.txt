@@ -1,0 +1,3 @@
+Vuxen;75
+Pensionär;50
+Barn;25
