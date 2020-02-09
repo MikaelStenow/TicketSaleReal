@@ -14,7 +14,7 @@ namespace TicketSale
     {
         TicketType selectedTicketTypes;
         int numberOfTicketsSold = 0;
-        int numberOfTicketsSelected = 0;
+        
 
         public TicketForm()
         {
@@ -55,6 +55,7 @@ namespace TicketSale
 
         private void RefundTicketButton_Click(object sender, EventArgs e)
         {
+            var numberOfTicketsSelected = GetNumberOfTicketsInListView();
             if (numberOfTicketsSold < numberOfTicketsSelected)
             {
                MessageBox.Show($"Du har försökt återköpa mer biljetter än det finns! Det har sålts {numberOfTicketsSold} st biljetter, men du har valt {numberOfTicketsSelected}.", "Återköp", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -66,9 +67,29 @@ namespace TicketSale
                     SaveTransaction(true);
             }
         }
+
+        private int GetNumberOfTicketsInListView()
+        {
+            int numberOfTicketsInListView = 0;
+            var items = TicketsListView.Items;
+
+            foreach (ListViewItem item in items)
+            {
+                if (item.SubItems[2].Text != "0")
+                {
+                    if (Int32.TryParse(item.SubItems[2].Text, out int numberOfTickets))
+                    {
+                        numberOfTicketsInListView += numberOfTickets;
+                    }
+                }
+            }
+
+            return numberOfTicketsInListView;
+        }
+
         private void BuyButton_Click(object sender, EventArgs e)
         {
-            SaveTransaction(false);
+            SaveTransaction(false);            
         }
 
         private void SelectButton_Click(object sender, EventArgs e)
@@ -77,7 +98,7 @@ namespace TicketSale
             {
                 TicketsListView.Items[selectedTicketTypes.Type].SubItems[2].Text = NumericUpDownTicketSales.Text;
             }
-            numberOfTicketsSelected += Decimal.ToInt32(NumericUpDownTicketSales.Value);
+            
             UpdateTotalAmount();
         }
         //Button end
@@ -102,10 +123,11 @@ namespace TicketSale
                     ticketTransaction.TicketType = item.Tag as TicketType;
 
                     ticketTransaction.TransactionType = refund;
+
            
                     if (Int32.TryParse(item.SubItems[2].Text, out int numberOfTickets))
                     {
-                        ticketTransaction.NumberOfTickets = numberOfTickets;
+                        ticketTransaction.NumberOfTickets = numberOfTickets;                       
                     }
 
                     ticketTransaction.TransactionDate = DateTime.Now.Date;
@@ -125,7 +147,7 @@ namespace TicketSale
             {
                 item.SubItems[2].Text = "0";
             }
-
+            
             UpdateTotalAmount();
         }
         private void UpdateTotalAmount()
