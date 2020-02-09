@@ -59,5 +59,36 @@ namespace TicketSale
             }
             File.AppendAllText(path, ticketTransaction + Environment.NewLine, System.Text.Encoding.GetEncoding(1252));
         }
+
+        public static int NumberOfTicketsSold()
+        {
+            try
+            {
+                int ticketsSold = 0;
+                string path = Path.Combine(assemblyPath, @"Transactions.csv");
+
+                var ticketTransactionList = new List<TicketTransaction>();
+
+                if (File.Exists(path) == true)
+                {
+                    string[] ticketTransactionArray = File.ReadAllLines(path, System.Text.Encoding.GetEncoding(1252));
+                    foreach (string transaction in ticketTransactionArray)
+                    {
+                        var t = transaction.Split(';');
+                        if (Int32.TryParse(t[3], out int numberOfTickets))
+                        {
+                            ticketsSold += numberOfTickets;
+                        }
+                    }
+                }
+                return ticketsSold;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
     }
 }

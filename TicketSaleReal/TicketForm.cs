@@ -12,14 +12,14 @@ namespace TicketSale
 {
     public partial class TicketForm : Form
     {
-        public TicketType SelectedTicketType { get; set; }
+        TicketType selectedTicketTypes;
+        int numberOfTicketsSold = 0;
+        int numberOfTicketsSelected = 0;
+
         public TicketForm()
         {
             InitializeComponent();
         }
-
-    
-
         private void TicketForm_Load(object sender, EventArgs e)
         {
             TicketsListView.Clear();
@@ -27,6 +27,8 @@ namespace TicketSale
             TicketsListView.Columns.Add("Biljett Typ", 200);
             TicketsListView.Columns.Add("Pris", 200);
             TicketsListView.Columns.Add("Antal biljetter", 100);
+
+            numberOfTicketsSold = FileHandler.NumberOfTicketsSold();
 
             var types = FileHandler.ReadTicketTypes();
             foreach (var type in types)
@@ -53,9 +55,16 @@ namespace TicketSale
 
         private void RefundTicketButton_Click(object sender, EventArgs e)
         {
-            var result = MessageBox.Show("Är du säker på att du vill genomföra detta återköp?", "Återköp", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if(result==DialogResult.Yes)
-               SaveTransaction(true);
+            if (numberOfTicketsSold < numberOfTicketsSelected)
+            {
+               MessageBox.Show($"Du har försökt återköpa mer biljetter än det finns! Det har sålts {numberOfTicketsSold} st biljetter, men du har valt {numberOfTicketsSelected}.", "Återköp", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                var result = MessageBox.Show("Är du säker på att du vill genomföra detta återköp?", "Återköp", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                    SaveTransaction(true);
+            }
         }
         private void BuyButton_Click(object sender, EventArgs e)
         {
@@ -64,18 +73,18 @@ namespace TicketSale
 
         private void SelectButton_Click(object sender, EventArgs e)
         {
-            if (TicketsListView.Items.ContainsKey(SelectedTicketType.Type))
+            if (TicketsListView.Items.ContainsKey(selectedTicketTypes.Type))
             {
-                TicketsListView.Items[SelectedTicketType.Type].SubItems[2].Text = NumericUpDownTicketSales.Text;
+                TicketsListView.Items[selectedTicketTypes.Type].SubItems[2].Text = NumericUpDownTicketSales.Text;
             }
-
+            numberOfTicketsSelected += Decimal.ToInt32(NumericUpDownTicketSales.Value);
             UpdateTotalAmount();
         }
         //Button end
 
         private void ComboBoxTicketTypes_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SelectedTicketType = ComboBoxTicketTypes.SelectedItem as TicketType;
+            selectedTicketTypes = ComboBoxTicketTypes.SelectedItem as TicketType;
             NumericUpDownTicketSales.Value = 1;
         }
 
@@ -138,11 +147,6 @@ namespace TicketSale
 
             //Interpolation
             TotalAmountLabel.Text = $"Totalt pris: {tot.ToString()}";
-        }
-
-        private void TotalAmountLabel_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

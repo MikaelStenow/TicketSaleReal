@@ -67,7 +67,6 @@
             this.TotalAmountLabel.Size = new System.Drawing.Size(59, 13);
             this.TotalAmountLabel.TabIndex = 2;
             this.TotalAmountLabel.Text = "Totalt pris: ";
-            this.TotalAmountLabel.Click += new System.EventHandler(this.TotalAmountLabel_Click);
             // 
             // TicketsListView
             // 
