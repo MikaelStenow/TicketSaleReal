@@ -1,6 +1,6 @@
 ﻿namespace TicketSale
 {
-    partial class Form1
+    partial class TicketForm
     {
         /// <summary>
         /// Required designer variable.
@@ -136,7 +136,7 @@
             this.SelectButton.UseVisualStyleBackColor = true;
             this.SelectButton.Click += new System.EventHandler(this.SelectButton_Click);
             // 
-            // Form1
+            // TicketForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -151,9 +151,9 @@
             this.Controls.Add(this.TotalAmountLabel);
             this.Controls.Add(this.Amount);
             this.Controls.Add(this.TicketType);
-            this.Name = "Form1";
+            this.Name = "TicketForm";
             this.Text = "Billjetförsäljning";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Load += new System.EventHandler(this.TicketForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.NumericUpDownTicketSales)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

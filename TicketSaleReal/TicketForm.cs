@@ -10,17 +10,17 @@ using System.Windows.Forms;
 
 namespace TicketSale
 {
-    public partial class Form1 : Form
+    public partial class TicketForm : Form
     {
         public TicketType SelectedTicketType { get; set; }
-        public Form1()
+        public TicketForm()
         {
             InitializeComponent();
         }
 
     
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void TicketForm_Load(object sender, EventArgs e)
         {
             TicketsListView.Clear();
 
