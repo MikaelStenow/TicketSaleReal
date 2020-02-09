@@ -61,10 +61,12 @@ namespace TicketSale
                MessageBox.Show($"Du har försökt återköpa mer biljetter än det finns! Det har sålts {numberOfTicketsSold} st biljetter, men du har valt {numberOfTicketsSelected}.", "Återköp", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
-            {
+            {                
                 var result = MessageBox.Show("Är du säker på att du vill genomföra detta återköp?", "Återköp", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (result == DialogResult.Yes)
+                {                    
                     SaveTransaction(true);
+                }
             }
         }
 
@@ -88,7 +90,7 @@ namespace TicketSale
         }
 
         private void BuyButton_Click(object sender, EventArgs e)
-        {
+        {            
             SaveTransaction(false);            
         }
 
@@ -124,11 +126,20 @@ namespace TicketSale
 
                     ticketTransaction.TransactionType = refund;
 
-           
+
+                               
                     if (Int32.TryParse(item.SubItems[2].Text, out int numberOfTickets))
                     {
                         ticketTransaction.NumberOfTickets = numberOfTickets;                       
                     }
+
+                    
+                    if (refund)
+                    {
+                        numberOfTicketsSold -= numberOfTickets;
+                    }
+                    else numberOfTicketsSold += numberOfTickets;
+                    
 
                     ticketTransaction.TransactionDate = DateTime.Now.Date;
 
